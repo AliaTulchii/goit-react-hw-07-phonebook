@@ -1,3 +1,3 @@
-// const getContact = state => state.contact.contacts.contacts;
+// const getContact = state => state.contact.contacts;
 
 // export default getContact;

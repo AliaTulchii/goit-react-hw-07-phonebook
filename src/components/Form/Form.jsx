@@ -1,9 +1,7 @@
 import React from 'react';
-import css from './Form.module.css'
-import { useDispatch, useSelector } from "react-redux";
-import { addContact, getContact } from "features/contact/contactSlice";
+import css from './Form.module.css';
 import { v4 } from 'uuid';
-// import getContact from 'features/contact/getContact';
+import { useCreateContactMutation, useFetchContactsQuery } from 'features/contact/contactsSlice';
 
 
 
@@ -11,31 +9,28 @@ import { v4 } from 'uuid';
 
 
 const Form = () => {
-    const dispatch = useDispatch()
     const [nameContact, setNameContact] = React.useState('')
     const [numberContact, setNumberContact] = React.useState('')
-    const contacts = useSelector(getContact)
-
-    const addContactHandler = () => {
     
-    const person = {
-        id: v4(),
-        name: nameContact,
-        number: numberContact,
-        }
+    const [createContact, { isLoading }] = useCreateContactMutation();
+    const { data } = useFetchContactsQuery();
+    
+
+
+    const addContactHandler = e => {
+        e.preventDefault();
         
         const isValidate = validateForm();
-        if (!isValidate) return;
-
-        const exist = contacts.find(contact => contact.name.toLowerCase().trim() === person.name.toLowerCase().trim());
-
-        if (exist) {
-        alert(`${person.name} is already in contacts list`);
-        return;
-    }
+        if (!isValidate) return;  
+        
+        
+        if (data) {
+            data.find(contact => contact.name.toLowerCase().trim() === nameContact.toLowerCase().trim())
+                ? alert(`${nameContact} is already in contacts list`)
+                : createContact({ name: nameContact, number: numberContact });        
+        }
+        
     
-    
-        dispatch(addContact(person))
         
         setNameContact('')
         setNumberContact('')
@@ -51,14 +46,16 @@ const Form = () => {
         return true;
     }
     
-    
+    const nameId = v4();
+    const numberId = v4();
         
         return (
-            <form  className={css.Form}>
+            <form  className={css.Form}  onSubmit={()=> addContactHandler()}>
 
                 <label  className={css.Form__inputLabel}>
                     <p>Name:</p>
                 <input
+                id={nameId}
                 type="text"
                 name="name"
                 pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -74,6 +71,7 @@ const Form = () => {
                 <label  className={css.Form__inputLabel}>
                     <p>Number:</p>
                 <input
+                    id={numberId}
                     type="tel"
                     name="number"
                     pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
@@ -87,9 +85,8 @@ const Form = () => {
                 </label>
                 
                 <button
-                    onClick={()=> addContactHandler()}
                     type="submit"
-                    className={css.Form__button}> Add contact</button>
+                    className={css.Form__button}>{isLoading ? <p>Loading...</p> : <p>Add contact</p>}</button>
             </form>
         )
     }
