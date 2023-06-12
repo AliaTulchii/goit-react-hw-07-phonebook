@@ -12,7 +12,7 @@ const ContactListItem = ({ contact, onDelete } ) => {
     return (
         <li 
             className={css.ContactsList__item}>     
-            <img src={contact.avatar } alt={contact.name} className={ css.ContactList__img } />
+            <img src={contact.avatar || person} alt={contact.name} className={ css.ContactList__img } />
             <p className={css.ContactsList__text}>{contact.name}</p>
                 <p className={css.ContactsList__textWhite}>{contact.number}</p>
                 <button
