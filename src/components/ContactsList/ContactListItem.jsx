@@ -3,11 +3,12 @@ import css from './ContactsList.module.css'
 import { FaTrashAlt } from 'react-icons/fa'
 import person from './person.png'
 import PropTypes from 'prop-types'
+import { useDeleteContactMutation } from 'features/contact/contactsSlice';
 // import { useDispatch } from 'react-redux';
 // import { removeContact } from 'features/contact/contactSlice';
 
-const ContactListItem = ({ contact, onDelete } ) => {
-    
+const ContactListItem = ({ contact } ) => {
+    const [deleteContact] = useDeleteContactMutation();
 
     return (
         <li 
@@ -17,7 +18,7 @@ const ContactListItem = ({ contact, onDelete } ) => {
                 <p className={css.ContactsList__textWhite}>{contact.number}</p>
                 <button
                     className={css.ContactsList__button}
-                    onClick={()=> onDelete(contact.id)}
+                    onClick={()=> deleteContact(contact.id)}
                 ><FaTrashAlt /></button>
             </li>)
    

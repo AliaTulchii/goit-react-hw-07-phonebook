@@ -1,47 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types'
 import ContactListItem from './ContactListItem';
-// import getContact from 'features/contact/getContact';
 import { useSelector } from 'react-redux';
 import getFilter from 'features/filter/getFilter';
 
 
 
-const ContactList = ({contacts, onDelete}) => {
-  // const contacts = useSelector(getContact);
+const ContactList = ({contacts}) => {
   const filter = useSelector(getFilter);
 
-    const getFiltered = () => {
-        if (!filter) {
-            return contacts;
-          }
-          const normalizedFilter = filter.toLowerCase();
-          const filteredContacts = contacts.filter(
-            ({ name, number }) =>
-              name.toLowerCase().trim().includes(normalizedFilter) ||
-              number.trim().includes(normalizedFilter)
-          );
-        
-          if (normalizedFilter && !filteredContacts.length) {
-            alert(`No contacts matching your request`);
-          }
-          return filteredContacts;
-    }
-        
-        
-    
-    const filtered = getFiltered();
+  
+    const normalizedFilter = filter.toLowerCase();
+    const filteredContacts = contacts.filter(
+      ({ name, number }) =>
+        name.toLowerCase().trim().includes(normalizedFilter) ||
+        number.trim().includes(normalizedFilter)
+    );
     
 
     if (contacts.length === 0) return null
 
     return (
         <ul>
-            {filtered.map((contact) => (
+            {filteredContacts.map((contact) => (
             <ContactListItem
               key={contact.id}
                 contact={contact}
-                onDelete={onDelete}
           />))}
         </ul>
     )

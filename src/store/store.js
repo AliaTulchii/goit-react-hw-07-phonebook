@@ -1,5 +1,4 @@
 import { configureStore } from "@reduxjs/toolkit";
-// import contactSlice from "features/contact/contactSlice";
 import filterSlice from "features/filter/filterSlice";
 import { contactsApi } from "features/contact/contactsSlice";
 
