@@ -50,7 +50,7 @@ const Form = () => {
     const numberId = v4();
         
         return (
-            <form  className={css.Form}  onSubmit={()=> addContactHandler()}>
+            <form  className={css.Form}  onSubmit={addContactHandler}>
 
                 <label  className={css.Form__inputLabel}>
                     <p>Name:</p>
